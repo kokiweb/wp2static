@@ -50,8 +50,11 @@ class DetectCategoryPaginationURLs {
             $total_pages = ceil( $total_posts / $default_posts_per_page );
 
             for ( $page = 1; $page <= $total_pages; $page++ ) {
-                $urls_to_include[] =
-                    "{$term}{$pagination_base}/{$page}/";
+                if ($page === 1) {
+                    $urls_to_include[] = "{$term}";
+                } else {
+                    $urls_to_include[] = "{$term}{$pagination_base}/{$page}/";
+                }
             }
         }
 
