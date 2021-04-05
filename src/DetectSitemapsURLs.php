@@ -93,6 +93,8 @@ class DetectSitemapsURLs {
                 if ( ! is_string( $sitemap ) ) {
                     continue;
                 }
+                
+                $sitemap = str_replace($wp_site_url, '', $sitemap);
 
                 $request = new Request( 'GET', $sitemap, $headers );
 
