@@ -93,6 +93,14 @@ class CoreOptions {
 
         $queries[] = $wpdb->prepare(
             $query_string,
+            'detectWebpExpress',
+            '1',
+            'Detect Webp Express',
+            'Include Converted images from WebpExpress in URL Detection.'
+        );
+
+        $queries[] = $wpdb->prepare(
+            $query_string,
             'queueJobOnPostSave',
             '1',
             'Post save',
@@ -374,6 +382,12 @@ class CoreOptions {
                     $table_name,
                     [ 'value' => isset( $_POST['detectUploads'] ) ? 1 : 0 ],
                     [ 'name' => 'detectUploads' ]
+                );
+
+                $wpdb->update(
+                    $table_name,
+                    [ 'value' => isset( $_POST['detectWebpExpress'] ) ? 1 : 0 ],
+                    [ 'name' => 'detectWebpExpress' ]
                 );
 
                 $wpdb->update(

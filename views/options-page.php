@@ -97,6 +97,23 @@
             </td>
         </tr>
 
+        <tr>
+            <td>
+                <label
+                    for="<?php echo $view['coreOptions']['detectWebpExpress']->name; ?>"
+                ><?php echo $view['coreOptions']['detectWebpExpress']->label; ?></label>
+            </td>
+            <td>
+                <input
+                    id="<?php echo $view['coreOptions']['detectWebpExpress']->name; ?>"
+                    name="<?php echo $view['coreOptions']['detectWebpExpress']->name; ?>"
+                    value="1"
+                    type="checkbox"
+                    <?php echo (int) $view['coreOptions']['detectWebpExpress']->value === 1 ? 'checked' : ''; ?>
+                />
+            </td>
+        </tr>
+
         </tbody>
     </table>
 

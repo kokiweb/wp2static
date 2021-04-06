@@ -242,6 +242,7 @@ class CLI {
             'detectPostPagination',
             'detectPosts',
             'detectUploads',
+            'detectWebpExpress'
         ];
 
         foreach ( $detections as $detection ) {
@@ -270,6 +271,7 @@ class CLI {
             'detectPostPagination',
             'detectPosts',
             'detectUploads',
+            'detectWebpExpress',
             'detectVendorCacheDirs',
             'detectWPIncludesAssets',
         ];
@@ -304,6 +306,7 @@ class CLI {
             'detectPostPagination',
             'detectPosts',
             'detectUploads',
+            'detectWebpExpress',
             'detectVendorCacheDirs',
             'detectWPIncludesAssets',
         ];

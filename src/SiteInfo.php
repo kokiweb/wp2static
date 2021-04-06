@@ -60,6 +60,10 @@ class SiteInfo {
                 trailingslashit( $upload_path_and_url['basedir'] ),
             'uploads_url' => trailingslashit( $upload_path_and_url['baseurl'] ),
 
+            // WebP Express
+            'webp_express_path' => trailingslashit( WP_CONTENT_DIR . "/webp-express/webp-images" ),
+            'webp_express_url' => trailingslashit( content_url() . "/webp-express/webp-images" ),
+
             // Plugins
             'plugins_path' => trailingslashit( WP_PLUGIN_DIR ),
             'plugins_url' => trailingslashit( plugins_url() ),
@@ -88,7 +92,7 @@ class SiteInfo {
 
         // TODO: Move trailingslashit() here ???
         $key = $name . '_path';
-
+        self::debug();
         if ( ! array_key_exists( $key, self::$info ) ) {
             $err = 'Attempted to access missing SiteInfo path';
             WsLog::l( $err );
