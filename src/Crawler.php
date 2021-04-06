@@ -104,6 +104,10 @@ class Crawler {
 
         $crawlable_paths = CrawlQueue::getCrawlablePaths();
         foreach ( $crawlable_paths as $root_relative_path ) {
+            if ($root_relative_path[0] !== '/') {
+                $root_relative_path = '/' . $root_relative_path;
+            }
+            
             $absolute_uri = new URL( $this->site_path . $root_relative_path );
             $url = $absolute_uri->get();
 
@@ -213,14 +217,13 @@ class Crawler {
             $auth_password = CoreOptions::getValue( 'basicAuthPassword' );
 
             if ( $auth_password ) {
-                $headers['auth'] = [ $auth_user, $auth_password ];
+                $headers['auth'] = [ $auth_user, $auth_password, 'basic' ];
             }
         }
 
         $request = new Request( 'GET', $url, $headers );
 
-        $response = $this->client->send( $request );
-
+        $response = $this->client->send( $request, $headers);
         return $response;
     }
 }

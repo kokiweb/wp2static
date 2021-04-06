@@ -16,7 +16,20 @@ class DetectSitemapsURLs {
      */
     public static function detect( string $wp_site_url ) : array {
         $sitemaps_urls = [];
-        $parser = new SitemapParser( 'WP2Static.com', [ 'strict' => false ] );
+
+        $headers = [];
+
+        $auth_user = CoreOptions::getValue( 'basicAuthUser' );
+
+        if ( $auth_user ) {
+            $auth_password = CoreOptions::getValue( 'basicAuthPassword' );
+
+            if ( $auth_password ) {
+                $headers['auth'] = [ $auth_user, $auth_password ];
+            }
+        }
+
+        $parser = new SitemapParser( 'WP2Static.com', [ 'strict' => false, 'guzzle' => $headers ] );
 
         $site_path = rtrim( SiteInfo::getURL( 'site' ), '/' );
 
@@ -31,6 +44,8 @@ class DetectSitemapsURLs {
             $base_uri = "{$base_uri}:{$port_override}";
         }
 
+        
+        
         $client = new Client(
             [
                 'base_uri' => $base_uri,
@@ -49,24 +64,13 @@ class DetectSitemapsURLs {
                         'WP2Static.com',
                     ),
                 ],
+                // 'auth' => $auth_header,
             ]
         );
 
-        $headers = [];
+        $request = new Request( 'GET', '/robots.txt', $headers);
 
-        $auth_user = CoreOptions::getValue( 'basicAuthUser' );
-
-        if ( $auth_user ) {
-            $auth_password = CoreOptions::getValue( 'basicAuthPassword' );
-
-            if ( $auth_password ) {
-                $headers['auth'] = [ $auth_user, $auth_password ];
-            }
-        }
-
-        $request = new Request( 'GET', '/robots.txt', $headers );
-
-        $response = $client->send( $request );
+        $response = $client->send( $request, $headers);
 
         $robots_exists = $response->getStatusCode() === 200;
 
@@ -93,32 +97,44 @@ class DetectSitemapsURLs {
                 if ( ! is_string( $sitemap ) ) {
                     continue;
                 }
-                
+
                 $sitemap = str_replace($wp_site_url, '', $sitemap);
 
-                $request = new Request( 'GET', $sitemap, $headers );
-
-                $response = $client->send( $request );
+                $request = new Request( 'GET', $sitemap, $headers);
+   
+                $response = $client->send( $request, $headers );
+         
 
                 $status_code = $response->getStatusCode();
+
 
                 if ( $status_code === 200 ) {
                     $parser->parse( $wp_site_url . $sitemap );
 
-                    $sitemaps_urls[] = '/' . str_replace(
+                    $sitemap_local = str_replace(
                         $wp_site_url,
                         '',
                         $sitemap
                     );
 
+                    if ($sitemap_local[0] !== '/') {
+                        $sitemap_local = '/' . $sitemap_local;
+                    }
+                    
+                    $sitemaps_urls[] = $sitemap_local;
+
                     $extract_sitemaps = $parser->getSitemaps();
 
                     foreach ( $extract_sitemaps as $url => $tags ) {
-                        $sitemaps_urls[] = '/' . str_replace(
+                        $sitemap_local = str_replace(
                             $wp_site_url,
                             '',
                             $url
                         );
+                        if ($sitemap_local[0] !== '/') {
+                            $sitemap_local = '/' . $sitemap_local;
+                        }
+                        $sitemaps_urls[] = $sitemap_local;
                     }
                 }
             }

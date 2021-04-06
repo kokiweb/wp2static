@@ -35,7 +35,7 @@ class URL {
             // test absolute URL
             if ( ! $url->getHost() ) {
                 throw new WP2StaticException(
-                    'Trying to create unsupported URL'
+                    'Trying to create unsupported URL:' . $url
                 );
             }
 

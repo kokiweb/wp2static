@@ -68,7 +68,6 @@ class URLDetector {
         if ( CoreOptions::getValue( 'detectWebpExpress' ) ) {
             $arrays_to_merge[] =
                 FilesHelper::getListOfLocalFilesByDir( SiteInfo::getPath( 'webp_express' ) );
-            var_dump(FilesHelper::getListOfLocalFilesByDir( SiteInfo::getPath( 'webp_express' ) ));
         } 
 
         $detect_sitemaps = apply_filters( 'wp2static_detect_sitemaps', 1 );

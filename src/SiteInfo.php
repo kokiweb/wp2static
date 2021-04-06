@@ -92,7 +92,6 @@ class SiteInfo {
 
         // TODO: Move trailingslashit() here ???
         $key = $name . '_path';
-        self::debug();
         if ( ! array_key_exists( $key, self::$info ) ) {
             $err = 'Attempted to access missing SiteInfo path';
             WsLog::l( $err );
